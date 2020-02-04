@@ -1,8 +1,13 @@
 package com.example.recycler;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -45,12 +51,25 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         //byte[] data return So we used bitmap
         Bitmap bitmap = BitmapFactory.decodeByteArray(u.getImg(),0, u.getImg().length);
         holder.img.setImageBitmap(bitmap);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+        holder.call.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               Toast.makeText(context,"You Clicked" + u.getName(),Toast.LENGTH_SHORT).show();
+                String phnum = "tel:" + u.getPhone();
+                Intent intent = new Intent(Intent.ACTION_CALL);
+                intent.setData(Uri.parse(phnum));
+                if(ActivityCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED)
+                {
+                    Toast.makeText(context, "Please Grant Permission", Toast.LENGTH_LONG).show();
+                    requestionPermission();
+                }
+                else {
+                    context.startActivity(intent);
+                }
             }
         });
+    }
+    private void requestionPermission(){
+        ActivityCompat.requestPermissions((Activity)context, new String[]{Manifest.permission.CALL_PHONE},1);
     }
 
     @Override
@@ -60,7 +79,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView tid, tname, tphone,tmail;
-        private ImageView img;
+        private ImageView img,call;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tid=itemView.findViewById(R.id.t1);
@@ -68,12 +87,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             tphone = itemView.findViewById(R.id.txt_phone);
             tmail = itemView.findViewById(R.id.txt_email);
             img = itemView.findViewById(R.id.ima);
-           /* itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(context, "You Clicked" + getAdapterPosition(),Toast.LENGTH_SHORT).show();
-                }
-            });*/
+            call =itemView.findViewById(R.id.img_call);
         }
     }
 }

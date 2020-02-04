@@ -9,6 +9,8 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +32,19 @@ public class MainActivity extends AppCompatActivity {
         //
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(this, recyclerView,
+                new RecyclerTouchListener.ClickListener() {
+                    @Override
+                    public void onClick(View view, int position) {
+                        Toast.makeText(MainActivity.this,"You Clicked" + position,Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onLongClick(View view, int position) {
+                        Toast.makeText(MainActivity.this,"We Clicked" + position,Toast.LENGTH_SHORT).show();
+                    }
+
+                }));
     }
     private void populateView() {
         Cursor data = handler.getData();

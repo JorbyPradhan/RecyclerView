@@ -46,5 +46,12 @@
             android:id="@+id/txt_email"
             android:textSize="30sp"/>
     </LinearLayout>
+    <ImageView
+        android:layout_marginTop="10dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/img_call"
+        android:src="@android:drawable/stat_sys_phone_call"
+        />
 </LinearLayout>
 </androidx.cardview.widget.CardView>
